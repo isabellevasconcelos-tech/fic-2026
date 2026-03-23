@@ -8,6 +8,7 @@ const DEFAULT_PROFILE = {
   username: 'explorador',
   full_name: 'Explorador',
   avatar_emoji: '🚀',
+  age: null,
   xp: 0,
   level: 1,
   streak_days: 0,
@@ -51,7 +52,7 @@ export function AuthProvider({ children }) {
     if (user) await fetchProfile(user.id)
   }
 
-  async function createProfile({ username, full_name, avatar_emoji }) {
+  async function createProfile({ username, full_name, avatar_emoji, age }) {
     const { data: authData, error: authError } = await supabase.auth.signInAnonymously()
     if (authError) throw authError
 
@@ -64,6 +65,7 @@ export function AuthProvider({ children }) {
         username,
         full_name,
         avatar_emoji,
+        age,
         xp: 0,
         level: 1,
         streak_days: 0,
@@ -73,11 +75,11 @@ export function AuthProvider({ children }) {
     await fetchProfile(userId)
   }
 
-  async function updateProfile({ username, full_name, avatar_emoji }) {
+  async function updateProfile({ username, full_name, avatar_emoji, age }) {
     if (!user) return
     const { error } = await supabase
       .from('profiles')
-      .update({ username, full_name, avatar_emoji, updated_at: new Date().toISOString() })
+      .update({ username, full_name, avatar_emoji, age, updated_at: new Date().toISOString() })
       .eq('id', user.id)
     if (error) throw error
     await fetchProfile(user.id)

@@ -1,16 +1,37 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { getAgeGroup } from '../lib/ageContent'
 
-const MOTIVATIONAL_PHRASES = [
-  { text: 'Cada real guardado hoje é liberdade amanhã.' },
-  { text: 'Quem controla o dinheiro, controla a vida.' },
-  { text: 'Investir em conhecimento rende os melhores juros.' },
-  { text: 'Seu eu do futuro vai agradecer suas escolhas de hoje.' },
-  { text: 'Pequenas economias, grandes conquistas.' },
-  { text: 'Dinheiro não traz felicidade, mas organização traz paz.' },
-  { text: 'O melhor momento pra começar a guardar foi ontem. O segundo melhor é agora.' },
-]
+const MOTIVATIONAL_PHRASES = {
+  child: [
+    { text: 'Guardar moedas hoje = brinquedo amanha!' },
+    { text: 'Quem junta dinheirinho, conquista o que quiser!' },
+    { text: 'Aprender sobre dinheiro e tipo um superpoder!' },
+    { text: 'Seu cofrinho pode virar um tesouro!' },
+    { text: 'Cada moeda conta na sua aventura!' },
+    { text: 'Economizar e como colecionar vitórias!' },
+    { text: 'Heroes de verdade sabem guardar seus tesouros!' },
+  ],
+  teen: [
+    { text: 'Cada real guardado hoje e liberdade amanha.' },
+    { text: 'Quem controla o dinheiro, controla a vida.' },
+    { text: 'Investir em conhecimento rende os melhores juros.' },
+    { text: 'Seu eu do futuro vai agradecer suas escolhas de hoje.' },
+    { text: 'Pequenas economias, grandes conquistas.' },
+    { text: 'Dinheiro nao traz felicidade, mas organizacao traz paz.' },
+    { text: 'O melhor momento pra comecar a guardar foi ontem. O segundo melhor e agora.' },
+  ],
+  adult: [
+    { text: 'Disciplina financeira e a base da liberdade.' },
+    { text: 'Quem entende juros compostos, ganha. Quem nao entende, paga.' },
+    { text: 'Riqueza nao e quanto voce ganha, e quanto voce mantem.' },
+    { text: 'Investir cedo e a maior vantagem competitiva que existe.' },
+    { text: 'Orcamento nao e restricao, e estrategia.' },
+    { text: 'Sua independencia financeira comeca com um plano.' },
+    { text: 'O custo de nao investir e maior do que qualquer risco.' },
+  ],
+}
 
 const FEATURED_CARD = { to: '/story', emoji: '🎮', label: 'Aprenda Jogando', desc: 'Sua jornada no Reino de Valoria' }
 
@@ -21,14 +42,16 @@ const GRID_CARDS = [
   { to: '/quiz-battle',   emoji: '⚔️', label: 'Quiz Battle',         desc: 'Teste seus conhecimentos' },
 ]
 
-function getDailyPhrase() {
+function getDailyPhrase(ageGroup) {
+  const phrases = MOTIVATIONAL_PHRASES[ageGroup] || MOTIVATIONAL_PHRASES.teen
   const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000)
-  return MOTIVATIONAL_PHRASES[dayOfYear % MOTIVATIONAL_PHRASES.length]
+  return phrases[dayOfYear % phrases.length]
 }
 
 export default function Home() {
   const { profile } = useAuth()
-  const dailyPhrase = useMemo(() => getDailyPhrase(), [])
+  const ageGroup = getAgeGroup(profile.age)
+  const dailyPhrase = useMemo(() => getDailyPhrase(ageGroup), [ageGroup])
 
   return (
     <div className="animate-fade-in py-6 sm:py-10">

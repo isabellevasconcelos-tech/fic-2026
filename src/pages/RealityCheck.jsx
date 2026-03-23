@@ -1,24 +1,58 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import { getAgeGroup } from '../lib/ageContent'
 
 // ========================
-// GASTOS COMUNS DO DIA-A-DIA
+// GASTOS POR FAIXA ETARIA
 // ========================
-const EXPENSES = [
-  { id: 'coffee', emoji: '☕', label: 'Cafezinho', daily: 8, desc: 'Cafe na padaria todo dia' },
-  { id: 'snack', emoji: '🍫', label: 'Lanchinho', daily: 10, desc: 'Salgado, chocolate, besteira...' },
-  { id: 'uber', emoji: '🚗', label: 'Uber/99', daily: 15, desc: 'Corridinha "rapida"' },
-  { id: 'delivery', emoji: '🛵', label: 'iFood', daily: 25, desc: 'Almocar por delivery' },
-  { id: 'subs', emoji: '📱', label: 'Apps/Assinaturas', daily: 5, desc: 'Streaming, jogos, apps' },
-  { id: 'impulse', emoji: '🛍️', label: 'Compra por impulso', daily: 8, desc: 'Shopee, promoção...' },
-]
+const EXPENSES_BY_AGE = {
+  child: [
+    { id: 'snack', emoji: '🍫', label: 'Lanchinho', daily: 5, desc: 'Salgado, chocolate, doce...' },
+    { id: 'stickers', emoji: '🎴', label: 'Figurinhas', daily: 3, desc: 'Album, cards, colecao' },
+    { id: 'games', emoji: '🎮', label: 'Jogos/Robux', daily: 4, desc: 'Jogos, skins, passes' },
+    { id: 'candy', emoji: '🍬', label: 'Doces e balas', daily: 3, desc: 'Bala, chiclete, sorvete' },
+    { id: 'toys', emoji: '🧸', label: 'Brinquedos', daily: 5, desc: 'Brinquedo, boneco, slime' },
+    { id: 'apps', emoji: '📱', label: 'Apps/Streaming', daily: 3, desc: 'YouTube, Netflix, jogos' },
+  ],
+  teen: [
+    { id: 'coffee', emoji: '☕', label: 'Cafezinho', daily: 8, desc: 'Cafe na padaria todo dia' },
+    { id: 'snack', emoji: '🍫', label: 'Lanchinho', daily: 10, desc: 'Salgado, chocolate, besteira...' },
+    { id: 'uber', emoji: '🚗', label: 'Uber/99', daily: 15, desc: 'Corridinha "rapida"' },
+    { id: 'delivery', emoji: '🛵', label: 'iFood', daily: 25, desc: 'Almocar por delivery' },
+    { id: 'subs', emoji: '📱', label: 'Apps/Assinaturas', daily: 5, desc: 'Streaming, jogos, apps' },
+    { id: 'impulse', emoji: '🛍️', label: 'Compra por impulso', daily: 8, desc: 'Shopee, promocao...' },
+  ],
+  adult: [
+    { id: 'coffee', emoji: '☕', label: 'Cafezinho', daily: 10, desc: 'Cafe especial todo dia' },
+    { id: 'snack', emoji: '🍫', label: 'Lanchinho', daily: 12, desc: 'Salgado, besteira no trabalho' },
+    { id: 'uber', emoji: '🚗', label: 'Uber/99', daily: 20, desc: 'Corridinha "rapida"' },
+    { id: 'delivery', emoji: '🛵', label: 'iFood/Delivery', daily: 35, desc: 'Almoco e janta por app' },
+    { id: 'subs', emoji: '📱', label: 'Assinaturas', daily: 8, desc: 'Streaming, apps, noticias' },
+    { id: 'impulse', emoji: '🛍️', label: 'Compra por impulso', daily: 15, desc: 'Online, promocao...' },
+  ],
+}
 
-const BUYABLE = [
-  { min: 300, emoji: '📱', label: 'iPhone 15', price: 5000, field: 'yearly' },
-  { min: 50, emoji: '✈️', label: 'Viagem internacional', price: 8000, field: 'yearly' },
-  { min: 150, emoji: '👟', label: 'Nike Air Jordan', price: 1800, field: 'yearly' },
-  { min: 40, emoji: '🏠', label: 'Entrada de um AP (10 anos)', price: 60000, field: 'decade' },
-]
+const BUYABLE_BY_AGE = {
+  child: [
+    { min: 50, emoji: '🎮', label: 'Nintendo Switch', price: 2500, field: 'yearly' },
+    { min: 30, emoji: '📱', label: 'Celular novo', price: 1500, field: 'yearly' },
+    { min: 20, emoji: '🎧', label: 'Fone Bluetooth', price: 300, field: 'yearly' },
+    { min: 10, emoji: '🚲', label: 'Bicicleta', price: 800, field: 'yearly' },
+  ],
+  teen: [
+    { min: 300, emoji: '📱', label: 'iPhone 15', price: 5000, field: 'yearly' },
+    { min: 50, emoji: '✈️', label: 'Viagem internacional', price: 8000, field: 'yearly' },
+    { min: 150, emoji: '👟', label: 'Nike Air Jordan', price: 1800, field: 'yearly' },
+    { min: 40, emoji: '🏠', label: 'Entrada de um AP (10 anos)', price: 60000, field: 'decade' },
+  ],
+  adult: [
+    { min: 300, emoji: '📱', label: 'iPhone 16 Pro', price: 8000, field: 'yearly' },
+    { min: 100, emoji: '✈️', label: 'Viagem internacional', price: 12000, field: 'yearly' },
+    { min: 200, emoji: '🚗', label: 'Entrada de um carro', price: 25000, field: 'yearly' },
+    { min: 80, emoji: '🏠', label: 'Entrada de um AP (10 anos)', price: 80000, field: 'decade' },
+  ],
+}
 
 const TOTAL_STEPS = 7
 
@@ -71,8 +105,12 @@ function AnimatedBar({ value, max, color, delay = 0 }) {
 // ========================
 export default function RealityCheck() {
   const navigate = useNavigate()
+  const { profile } = useAuth()
+  const ageGroup = getAgeGroup(profile.age)
+  const EXPENSES = EXPENSES_BY_AGE[ageGroup] || EXPENSES_BY_AGE.teen
+  const BUYABLE = BUYABLE_BY_AGE[ageGroup] || BUYABLE_BY_AGE.teen
   const [step, setStep] = useState(0)
-  const [selected, setSelected] = useState(new Set(['snack', 'coffee']))
+  const [selected, setSelected] = useState(new Set([EXPENSES[0]?.id, EXPENSES[1]?.id].filter(Boolean)))
 
   const toggle = (id) => {
     setSelected(prev => {
