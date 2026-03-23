@@ -200,7 +200,7 @@ export default function Chat() {
       </div>
 
       {/* Input bar */}
-      <div className="sticky bottom-0 bg-dark-900/95 backdrop-blur-md border-t border-gold-accent/10 px-4 pt-3 pb-6">
+      <div className="sticky bottom-0 bg-dark-900/95 backdrop-blur-md border-t border-gold-accent/10 px-4 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <div className="flex items-end gap-3">
           <input
             ref={inputRef}
@@ -208,12 +208,12 @@ export default function Chat() {
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Pergunte ao Auron..."
-            className="flex-1 bg-dark-700/60 border border-rose-light/15 rounded-xl px-4 py-3 text-sm text-enchanted placeholder:text-enchanted-muted/40 font-body focus:outline-none focus:border-gold-accent/30 transition-colors"
+            className="flex-1 bg-dark-700/60 border border-rose-light/15 rounded-xl px-4 py-3 text-base text-enchanted placeholder:text-enchanted-muted/40 font-body focus:outline-none focus:border-gold-accent/30 transition-colors"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim()}
-            className="w-11 h-11 rounded-xl bg-gold-accent/15 border border-gold-accent/30 flex items-center justify-center shrink-0 hover:bg-gold-accent/25 active:scale-95 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-12 h-12 rounded-xl bg-gold-accent/15 border border-gold-accent/30 flex items-center justify-center shrink-0 hover:bg-gold-accent/25 active:scale-95 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-gold-accent">
               <path d="M22 2L11 13" />

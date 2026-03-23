@@ -19,10 +19,10 @@ export default function TopBar() {
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-dark-900/95 border-b border-gold-accent/10">
-      <div className="flex items-center justify-end gap-3 h-14 px-4">
+      <div className="flex items-center justify-end gap-2 h-14 px-4">
         {/* Perfil */}
-        <Link to="/profile" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded-full bg-rose-pastel border border-gold-accent/25 flex items-center justify-center text-base shrink-0 group-hover:border-gold-accent/50 transition-colors">
+        <Link to="/profile" className="flex items-center gap-2 group p-1">
+          <div className="w-10 h-10 rounded-full bg-rose-pastel border border-gold-accent/25 flex items-center justify-center text-lg shrink-0 group-hover:border-gold-accent/50 transition-colors">
             {profile?.avatar_emoji || '💰'}
           </div>
         </Link>
@@ -31,7 +31,7 @@ export default function TopBar() {
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-rose-pastel/30 transition-colors"
+            className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-rose-pastel/30 transition-colors"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" className="text-enchanted-muted">
               <circle cx="10" cy="4" r="1.5" />
@@ -45,14 +45,14 @@ export default function TopBar() {
               <Link
                 to="/profile"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-enchanted-muted hover:text-enchanted hover:bg-rose-pastel/20 transition-colors font-body"
+                className="flex items-center gap-2.5 px-4 py-3 text-sm text-enchanted-muted hover:text-enchanted hover:bg-rose-pastel/20 transition-colors font-body"
               >
                 <span>👤</span> Meu Perfil
               </Link>
               <Link
                 to="/modules"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-enchanted-muted hover:text-enchanted hover:bg-rose-pastel/20 transition-colors font-body"
+                className="flex items-center gap-2.5 px-4 py-3 text-sm text-enchanted-muted hover:text-enchanted hover:bg-rose-pastel/20 transition-colors font-body"
               >
                 <span>📚</span> Trilhas
               </Link>

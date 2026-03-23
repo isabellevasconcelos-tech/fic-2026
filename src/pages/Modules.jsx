@@ -44,7 +44,7 @@ function ModuleList() {
   }
 
   return (
-    <div className="pb-24 px-4 pt-8 animate-fade-in">
+    <div className="pb-28 px-4 pt-6 animate-fade-in">
       <h1 className="page-title mb-12">Trilhas</h1>
       <div className="space-y-6">
         {modules.map(mod => {
@@ -122,7 +122,7 @@ function ModuleDetail({ slug }) {
   }
 
   return (
-    <div className="pb-24 px-4 pt-8 animate-fade-in">
+    <div className="pb-28 px-4 pt-6 animate-fade-in">
       <Link to="/modules" className="text-text-muted text-sm font-heading hover:text-text-secondary mb-4 inline-flex items-center gap-1">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />

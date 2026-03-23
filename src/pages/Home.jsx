@@ -31,40 +31,39 @@ export default function Home() {
   const dailyPhrase = useMemo(() => getDailyPhrase(), [])
 
   return (
-    <div className="pb-24 px-4 pt-4 animate-fade-in flex flex-col gap-3">
+    <div className="pb-28 px-4 pt-4 animate-fade-in flex flex-col gap-3">
 
       {/* ── Título ── */}
-      <div className="text-center py-3">
+      <div className="text-center py-2">
         <h1
-          className="font-display text-5xl sm:text-6xl font-bold text-gold-accent tracking-wide leading-none inline-block"
+          className="font-display text-4xl font-bold text-gold-accent tracking-wide leading-none inline-block"
           style={{ textShadow: '0 0 24px rgba(212,175,55,0.7), 0 0 60px rgba(212,175,55,0.3), 0 2px 6px rgba(0,0,0,0.8)' }}
         >
           MoneyQuest
         </h1>
-        <p className="text-sm sm:text-base text-enchanted-muted font-heading tracking-[0.12em] mt-2">
+        <p className="text-xs text-enchanted-muted font-heading tracking-[0.12em] mt-1.5">
           Sua jornada financeira começa aqui
         </p>
       </div>
 
       {/* ── Pensamento do Dia ── */}
-      <div className="card-primary p-5 rounded-2xl">
-        <div className="flex items-center gap-4">
+      <div className="card-primary p-4 rounded-2xl">
+        <div className="flex items-center gap-3">
           <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-xl shrink-0 shadow-lg"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 shadow-lg"
             style={{ background: 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)' }}
           >
             💡
           </div>
           <div className="flex-1 min-w-0">
-            <span className="font-heading text-sm sm:text-base font-semibold text-enchanted uppercase tracking-widest block">
+            <span className="font-heading text-xs font-semibold text-enchanted uppercase tracking-widest block">
               Pensamento do Dia
             </span>
-            <span className="text-enchanted-muted/70 text-[11px] sm:text-xs font-body block mt-1 italic leading-relaxed">
+            <span className="text-enchanted-muted/70 text-[11px] font-body block mt-0.5 italic leading-relaxed">
               "{dailyPhrase.text}"
             </span>
           </div>
         </div>
-        <div className="mt-4 h-px bg-gradient-to-r from-transparent via-rose-accent/30 to-transparent" />
       </div>
 
       {/* ── Explorar ── */}
@@ -73,26 +72,25 @@ export default function Home() {
           Explorar
         </h2>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2.5">
           {FEATURE_CARDS.map(card => (
             <Link
               key={card.to}
               to={card.to}
-              className="group card-primary aspect-square rounded-2xl flex flex-col items-center justify-center text-center gap-2 p-3 transition-all duration-300 hover:-translate-y-1 hover:border-gold-accent/40 active:scale-[0.96]"
+              className="group card-primary rounded-2xl flex items-center gap-3 p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-gold-accent/40 active:scale-[0.97]"
               style={{ boxShadow: '0 0 12px rgba(212,175,55,0.15), 0 0 30px rgba(212,175,55,0.08), inset 0 0 12px rgba(212,175,55,0.03)' }}
             >
               <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-xl shrink-0 shadow-lg"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 shadow-lg"
                 style={{ background: 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)' }}
               >
                 {card.emoji}
               </div>
-
-              <div>
+              <div className="min-w-0">
                 <span className="font-heading text-xs font-semibold text-enchanted block leading-tight">
                   {card.label}
                 </span>
-                <span className="text-enchanted-muted/50 text-[9px] font-body block mt-0.5">
+                <span className="text-enchanted-muted/50 text-[11px] font-body block mt-0.5">
                   {card.desc}
                 </span>
               </div>
