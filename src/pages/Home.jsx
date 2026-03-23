@@ -36,10 +36,10 @@ const MOTIVATIONAL_PHRASES = {
 const FEATURED_CARD = { to: '/story', emoji: '🎮', label: 'Aprenda Jogando', desc: 'Sua jornada no Reino de Valoria' }
 
 const GRID_CARDS = [
-  { to: '/reality-check', emoji: '💀', label: 'Choque de Realidade', desc: 'Gastos e receitas' },
-  { to: '/simulator',     emoji: '🐷', label: 'Economia',            desc: 'Simule suas economias' },
-  { to: '/profile',       emoji: '📊', label: 'Seu Progresso',       desc: 'Acompanhe sua evolução' },
-  { to: '/quiz-battle',   emoji: '⚔️', label: 'Quiz Battle',         desc: 'Teste seus conhecimentos' },
+  { to: '/modules',        emoji: '📚', label: 'Aulas',               desc: 'Trilhas de aprendizado' },
+  { to: '/reality-check',  emoji: '💀', label: 'Choque de Realidade', desc: 'Gastos e receitas' },
+  { to: '/simulator',      emoji: '🐷', label: 'Economia',            desc: 'Simule suas economias' },
+  { to: '/quiz-battle',    emoji: '⚔️', label: 'Quiz Battle',         desc: 'Teste seus conhecimentos' },
 ]
 
 function getDailyPhrase(ageGroup) {
