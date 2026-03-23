@@ -83,17 +83,12 @@ export default function Home() {
                 {dailyPhrase.text}
               </p>
 
-              {/* Bottom ornament — mirrored double line */}
+              {/* Bottom ornament */}
               <div className="book-ornament mt-3" style={{ width: '50%', margin: '0.75rem auto 0' }}>
                 <span className="book-ornament-line" />
                 <svg width="22" height="22" viewBox="0 0 8 8" className="text-gold-accent/60">
                   <path d="M4 0.5L5.1 2.8L7.6 3.1L5.8 4.8L6.2 7.3L4 6.1L1.8 7.3L2.2 4.8L0.4 3.1L2.9 2.8Z" fill="currentColor" />
                 </svg>
-                <span className="book-ornament-line" />
-              </div>
-              <div className="book-ornament mt-1">
-                <span className="book-ornament-line" />
-                <span className="text-gold-accent/30 text-xs">&#10040;</span>
                 <span className="book-ornament-line" />
               </div>
             </div>
