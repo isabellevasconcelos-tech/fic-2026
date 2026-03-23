@@ -4,11 +4,57 @@ import { supabase } from '../lib/supabase'
 
 const AVATAR_OPTIONS = ['🚀', '🧙', '🦊', '🐉', '👑', '⚔️', '🎮', '💎', '🔥', '🌟', '🦁', '🐺', '🦅', '🎯', '🏆', '🛡️']
 
+function AvatarSelector({ value, onChange }) {
+  return (
+    <div>
+      <label className="section-title block mb-3 text-center">Escolha seu Avatar</label>
+      <div className="flex flex-wrap gap-2 justify-center">
+        {AVATAR_OPTIONS.map(emoji => (
+          <button
+            key={emoji}
+            type="button"
+            onClick={() => onChange(emoji)}
+            className={`w-12 h-12 rounded-full flex items-center justify-center text-xl transition-all duration-200 ${
+              value === emoji
+                ? 'border-2 border-gold-accent scale-110 shadow-[0_0_12px_rgba(212,175,55,0.3)]'
+                : 'border border-dark-500 hover:border-gold-accent/40'
+            }`}
+            style={{
+              background: value === emoji
+                ? 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)'
+                : '#2e1824',
+            }}
+          >
+            {emoji}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function AgeInput({ value, onChange }) {
+  return (
+    <div>
+      <label className="section-title block mb-2">Idade</label>
+      <input
+        type="number"
+        value={value || ''}
+        onChange={e => onChange(e.target.value ? parseInt(e.target.value) : null)}
+        placeholder="Sua idade"
+        min={8}
+        max={99}
+        className="w-full px-4 py-3 rounded-xl bg-dark-700/60 border border-rose-light/15 text-enchanted placeholder:text-enchanted-muted/40 font-body focus:outline-none focus:border-gold-accent/30 transition-colors"
+      />
+    </div>
+  )
+}
+
 export default function Profile() {
   const { user, profile, createProfile, updateProfile, signOut } = useAuth()
   const [stats, setStats] = useState({ lessons: 0, quizzes: 0 })
   const [editing, setEditing] = useState(false)
-  const [form, setForm] = useState({ full_name: '', username: '', avatar_emoji: '🚀' })
+  const [form, setForm] = useState({ full_name: '', username: '', avatar_emoji: '🚀', age: null })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -18,7 +64,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (user && profile.id) {
-      setForm({ full_name: profile.full_name, username: profile.username, avatar_emoji: profile.avatar_emoji })
+      setForm({ full_name: profile.full_name, username: profile.username, avatar_emoji: profile.avatar_emoji, age: profile.age })
     }
   }, [user, profile])
 
@@ -39,6 +85,10 @@ export default function Profile() {
       setError('Preencha nome e apelido.')
       return
     }
+    if (!form.age || form.age < 8 || form.age > 99) {
+      setError('Informe sua idade (8-99).')
+      return
+    }
     setSaving(true)
     setError('')
     try {
@@ -46,6 +96,7 @@ export default function Profile() {
         full_name: form.full_name.trim(),
         username: form.username.trim().toLowerCase().replace(/\s+/g, '_'),
         avatar_emoji: form.avatar_emoji,
+        age: form.age,
       })
     } catch (err) {
       setError(err.message || 'Erro ao criar perfil.')
@@ -67,6 +118,7 @@ export default function Profile() {
         full_name: form.full_name.trim(),
         username: form.username.trim().toLowerCase().replace(/\s+/g, '_'),
         avatar_emoji: form.avatar_emoji,
+        age: form.age,
       })
       setEditing(false)
     } catch (err) {
@@ -87,33 +139,8 @@ export default function Profile() {
           </p>
 
           <form onSubmit={handleCreate} className="space-y-5">
-            {/* Avatar selector */}
-            <div>
-              <label className="section-title block mb-3">Escolha seu Avatar</label>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {AVATAR_OPTIONS.map(emoji => (
-                  <button
-                    key={emoji}
-                    type="button"
-                    onClick={() => setForm(f => ({ ...f, avatar_emoji: emoji }))}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center text-xl transition-all duration-200 ${
-                      form.avatar_emoji === emoji
-                        ? 'border-2 border-gold-accent scale-110 shadow-[0_0_12px_rgba(212,175,55,0.3)]'
-                        : 'border border-dark-500 hover:border-gold-accent/40'
-                    }`}
-                    style={{
-                      background: form.avatar_emoji === emoji
-                        ? 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)'
-                        : '#2e1824',
-                    }}
-                  >
-                    {emoji}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <AvatarSelector value={form.avatar_emoji} onChange={v => setForm(f => ({ ...f, avatar_emoji: v }))} />
 
-            {/* Name */}
             <div>
               <label className="section-title block mb-2">Nome</label>
               <input
@@ -126,7 +153,6 @@ export default function Profile() {
               />
             </div>
 
-            {/* Username */}
             <div>
               <label className="section-title block mb-2">Apelido</label>
               <input
@@ -139,9 +165,9 @@ export default function Profile() {
               />
             </div>
 
-            {error && (
-              <p className="text-state-error text-sm text-center">{error}</p>
-            )}
+            <AgeInput value={form.age} onChange={v => setForm(f => ({ ...f, age: v }))} />
+
+            {error && <p className="text-state-error text-sm text-center">{error}</p>}
 
             <button
               type="submit"
@@ -170,33 +196,8 @@ export default function Profile() {
           <h1 className="page-title text-center mb-6">Editar Perfil</h1>
 
           <form onSubmit={handleUpdate} className="space-y-5">
-            {/* Avatar selector */}
-            <div>
-              <label className="section-title block mb-3">Avatar</label>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {AVATAR_OPTIONS.map(emoji => (
-                  <button
-                    key={emoji}
-                    type="button"
-                    onClick={() => setForm(f => ({ ...f, avatar_emoji: emoji }))}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center text-xl transition-all duration-200 ${
-                      form.avatar_emoji === emoji
-                        ? 'border-2 border-gold-accent scale-110 shadow-[0_0_12px_rgba(212,175,55,0.3)]'
-                        : 'border border-dark-500 hover:border-gold-accent/40'
-                    }`}
-                    style={{
-                      background: form.avatar_emoji === emoji
-                        ? 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)'
-                        : '#2e1824',
-                    }}
-                  >
-                    {emoji}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <AvatarSelector value={form.avatar_emoji} onChange={v => setForm(f => ({ ...f, avatar_emoji: v }))} />
 
-            {/* Name */}
             <div>
               <label className="section-title block mb-2">Nome</label>
               <input
@@ -209,7 +210,6 @@ export default function Profile() {
               />
             </div>
 
-            {/* Username */}
             <div>
               <label className="section-title block mb-2">Apelido</label>
               <input
@@ -222,9 +222,9 @@ export default function Profile() {
               />
             </div>
 
-            {error && (
-              <p className="text-state-error text-sm text-center">{error}</p>
-            )}
+            <AgeInput value={form.age} onChange={v => setForm(f => ({ ...f, age: v }))} />
+
+            {error && <p className="text-state-error text-sm text-center">{error}</p>}
 
             <div className="flex gap-3">
               <button
@@ -260,11 +260,11 @@ export default function Profile() {
 
   return (
     <div className="pb-28 px-4 pt-6 animate-fade-in">
-      {/* Profile Header */}
       <div className="card-primary p-6 text-center mb-8">
         <span className="text-5xl mb-3 block icon-pop inline-block">{profile.avatar_emoji}</span>
         <h1 className="page-title">{profile.full_name}</h1>
         <p className="page-subtitle text-sm mt-1">@{profile.username}</p>
+        {profile.age && <p className="text-text-muted text-xs font-heading mt-1">{profile.age} anos</p>}
 
         <hr className="divider-glow my-4" />
 
@@ -282,7 +282,6 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="card-info p-4 text-center hover-lift">
           <p className="font-display text-2xl font-bold neon-text">{profile.xp}</p>
@@ -302,7 +301,6 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Actions */}
       <div className="space-y-3">
         <button
           onClick={() => setEditing(true)}

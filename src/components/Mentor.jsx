@@ -1,96 +1,95 @@
 import { useState, useRef, useEffect } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import { getAgeGroup } from '../lib/ageContent'
 
-const AURON_RESPONSES = [
-  {
-    keywords: ['orcamento', 'orçamento', 'organizar', 'planejar', 'planejamento'],
-    reply: 'Orcamento e simples: anote tudo que ENTRA e tudo que SAI. A regra basica e gastar menos do que ganha. Tente a regra 50-30-20: 50% para necessidades, 30% para desejos e 20% para poupanca.',
-  },
-  {
-    keywords: ['poupar', 'poupanca', 'poupança', 'guardar', 'economizar', 'economia'],
-    reply: 'Comece pequeno! Guarde pelo menos 10% de tudo que receber. O segredo nao e o valor, e o HABITO. Com o tempo, voce se acostuma e ate aumenta esse percentual.',
-  },
-  {
-    keywords: ['investir', 'investimento', 'investimentos', 'renda', 'rendimento'],
-    reply: 'Investir e fazer o dinheiro trabalhar pra voce. Comece pelo basico: Tesouro Direto e CDBs sao otimas portas de entrada. Lembre-se: quanto maior o retorno prometido, maior o risco!',
-  },
-  {
-    keywords: ['divida', 'dívida', 'dividas', 'dívidas', 'dever', 'devendo', 'emprestimo'],
-    reply: 'Dividas com juros altos sao o maior inimigo das suas financas. Priorize pagar as dividas mais caras primeiro (cartao de credito, cheque especial). Negocie sempre que possivel!',
-  },
-  {
-    keywords: ['cartao', 'cartão', 'credito', 'crédito'],
-    reply: 'Cartao de credito nao e dinheiro extra! Use como ferramenta, nao como muleta. Pague SEMPRE a fatura total. Os juros do rotativo podem passar de 400% ao ano — e o maior vilao financeiro.',
-  },
-  {
-    keywords: ['emergencia', 'emergência', 'reserva', 'imprevisto'],
-    reply: 'Sua reserva de emergencia deve cobrir de 3 a 6 meses dos seus gastos mensais. Guarde num lugar seguro e com liquidez, como Tesouro Selic ou CDB com liquidez diaria. Emergencias NAO sao "se", sao "quando".',
-  },
-  {
-    keywords: ['salario', 'salário', 'renda', 'ganhar', 'dinheiro'],
-    reply: 'Nao importa quanto voce ganha, importa quanto voce GUARDA. Pessoas que ganham muito e gastam tudo estao em pior situacao do que quem ganha pouco e poupa. Controle e tudo!',
-  },
-  {
-    keywords: ['meta', 'metas', 'objetivo', 'objetivos', 'sonho', 'sonhos'],
-    reply: 'Defina metas SMART: Especificas, Mensuraveis, Alcancaveis, Relevantes e com Prazo. Em vez de "quero guardar dinheiro", diga "vou guardar R$200 por mes durante 12 meses para minha viagem".',
-  },
-  {
-    keywords: ['golpe', 'golpes', 'piramide', 'pirâmide', 'fraude', 'scam'],
-    reply: 'Se alguem promete retornos garantidos e altissimos, DESCONFIE. Piramides financeiras funcionam assim: pagam os primeiros com o dinheiro dos novos. Quando para de entrar gente, desmorona. Se parece bom demais, e golpe!',
-  },
-  {
-    keywords: ['cripto', 'bitcoin', 'criptomoeda', 'criptomoedas', 'crypto'],
-    reply: 'Criptomoedas sao investimentos de ALTO RISCO. Nunca invista mais do que voce pode perder. Entenda o que esta comprando antes de investir. E cuidado com "dicas quentes" e influenciadores.',
-  },
-  {
-    keywords: ['acao', 'ações', 'acoes', 'bolsa', 'ação'],
-    reply: 'A bolsa de valores e para longo prazo. Nao tente "adivinhar" o mercado. Diversifique seus investimentos e invista com regularidade. Fundos de indice (ETFs) sao otimos para comecar.',
-  },
-  {
-    keywords: ['oi', 'ola', 'olá', 'hey', 'eai', 'bom dia', 'boa tarde', 'boa noite', 'hello'],
-    reply: 'Ola, jovem aventureiro! Sou o Mestre Auron, seu conselheiro financeiro. Me pergunte qualquer coisa sobre dinheiro, investimentos, poupanca ou orcamento. Estou aqui pra te ajudar!',
-  },
-  {
-    keywords: ['obrigado', 'obrigada', 'valeu', 'thanks', 'brigado', 'brigada'],
-    reply: 'Por nada! Lembre-se: conhecimento financeiro e o melhor investimento que existe. Retorno garantido e pra vida toda. Continue aprendendo!',
-  },
-  {
-    keywords: ['ajuda', 'help', 'ajudar', 'o que', 'como', 'duvida', 'dúvida'],
-    reply: 'Posso te ajudar com varios temas! Pergunte sobre: orcamento, poupanca, investimentos, dividas, cartao de credito, reserva de emergencia, metas financeiras, golpes e muito mais.',
-  },
-  {
-    keywords: ['imposto', 'impostos', 'ir', 'declarar', 'declaracao'],
-    reply: 'Impostos sao obrigacoes que todo cidadao tem. O importante e se organizar: guarde recibos, acompanhe seus rendimentos e, quando chegar a hora de declarar, estara tudo pronto. Planejamento evita dor de cabeca!',
-  },
-  {
-    keywords: ['mesada', 'mesadas', 'dinheiro dos pais'],
-    reply: 'Se voce recebe mesada, ja esta no jogo! Separe em 3 partes: uma pra gastar agora, uma pra guardar pra algo que quer, e uma pra reserva. Esse habito agora vai te fazer um adulto financeiramente forte.',
-  },
-]
+const AURON_RESPONSES = {
+  child: [
+    { keywords: ['orcamento', 'orçamento', 'organizar', 'planejar'], reply: 'Orcamento e tipo um plano pro seu dinheiro! Anote tudo que voce ganha (mesada, presentes) e tudo que gasta. A regra e simples: tente nao gastar TUDO de uma vez!' },
+    { keywords: ['poupar', 'poupanca', 'poupança', 'guardar', 'economizar'], reply: 'Guardar dinheiro e como colecionar! Cada moedinha que voce guarda vai crescendo. Tente guardar um pouquinho toda vez que ganhar dinheiro — nem que seja R$1!' },
+    { keywords: ['investir', 'investimento', 'rendimento'], reply: 'Investir e quando voce coloca seu dinheiro pra trabalhar pra voce! E como plantar uma semente: voce cuida dela e com o tempo ela vira uma arvore grande. Quanto mais cedo comecar, melhor!' },
+    { keywords: ['divida', 'dívida', 'dever', 'devendo'], reply: 'Divida e quando voce gasta mais do que tem e fica devendo. E importante evitar isso! Se voce quer comprar algo caro, e melhor juntar o dinheiro primeiro do que pedir emprestado.' },
+    { keywords: ['golpe', 'golpes', 'piramide', 'fraude'], reply: 'Se alguem falar que voce vai ganhar muito dinheiro facil e rapido, CUIDADO! Isso geralmente e golpe. Dinheiro de verdade vem com esforco e paciencia. Na duvida, fale com um adulto de confianca!' },
+    { keywords: ['mesada', 'mesadas', 'dinheiro dos pais'], reply: 'A mesada e seu primeiro treino com dinheiro! Divida em 3: uma parte pra gastar no que quiser, uma pra guardar pra algo especial, e uma pro cofrinho. Voce vai ver como e legal ver o dinheiro crescer!' },
+    { keywords: ['oi', 'ola', 'olá', 'hey', 'eai', 'bom dia', 'boa tarde', 'boa noite'], reply: 'Ola, jovem aventureiro! Sou o Mestre Auron! Estou aqui pra te ensinar tudo sobre dinheiro de um jeito divertido. Me pergunta qualquer coisa!' },
+    { keywords: ['obrigado', 'obrigada', 'valeu', 'brigado'], reply: 'De nada! Voce esta no caminho certo aprendendo sobre dinheiro. Continue assim que voce vai longe!' },
+    { keywords: ['ajuda', 'help', 'ajudar', 'duvida', 'dúvida'], reply: 'Posso te ajudar com varias coisas! Pergunte sobre mesada, como guardar dinheiro, por que economizar, golpes e muito mais!' },
+    { keywords: ['meta', 'metas', 'objetivo', 'sonho'], reply: 'Quer comprar algo legal? Faca assim: descubra quanto custa, quanto voce consegue guardar por semana e calcule quantas semanas precisa. E tipo uma missao de jogo!' },
+  ],
+  teen: [
+    { keywords: ['orcamento', 'orçamento', 'organizar', 'planejar', 'planejamento'], reply: 'Orcamento e simples: anote tudo que ENTRA e tudo que SAI. A regra basica e gastar menos do que ganha. Tente a regra 50-30-20: 50% para necessidades, 30% para desejos e 20% para poupanca.' },
+    { keywords: ['poupar', 'poupanca', 'poupança', 'guardar', 'economizar', 'economia'], reply: 'Comece pequeno! Guarde pelo menos 10% de tudo que receber. O segredo nao e o valor, e o HABITO. Com o tempo, voce se acostuma e ate aumenta esse percentual.' },
+    { keywords: ['investir', 'investimento', 'investimentos', 'renda', 'rendimento'], reply: 'Investir e fazer o dinheiro trabalhar pra voce. Comece pelo basico: Tesouro Direto e CDBs sao otimas portas de entrada. Lembre-se: quanto maior o retorno prometido, maior o risco!' },
+    { keywords: ['divida', 'dívida', 'dividas', 'dívidas', 'dever', 'devendo', 'emprestimo'], reply: 'Dividas com juros altos sao o maior inimigo das suas financas. Priorize pagar as dividas mais caras primeiro (cartao de credito, cheque especial). Negocie sempre que possivel!' },
+    { keywords: ['cartao', 'cartão', 'credito', 'crédito'], reply: 'Cartao de credito nao e dinheiro extra! Use como ferramenta, nao como muleta. Pague SEMPRE a fatura total. Os juros do rotativo podem passar de 400% ao ano.' },
+    { keywords: ['emergencia', 'emergência', 'reserva', 'imprevisto'], reply: 'Sua reserva de emergencia deve cobrir de 3 a 6 meses dos seus gastos. Guarde num lugar seguro e com liquidez, como Tesouro Selic. Emergencias NAO sao "se", sao "quando".' },
+    { keywords: ['salario', 'salário', 'renda', 'ganhar', 'dinheiro'], reply: 'Nao importa quanto voce ganha, importa quanto voce GUARDA. Pessoas que ganham muito e gastam tudo estao em pior situacao do que quem ganha pouco e poupa.' },
+    { keywords: ['meta', 'metas', 'objetivo', 'objetivos', 'sonho', 'sonhos'], reply: 'Defina metas claras! Em vez de "quero guardar dinheiro", diga "vou guardar R$200 por mes durante 12 meses para minha viagem". Ter um objetivo concreto facilita tudo.' },
+    { keywords: ['golpe', 'golpes', 'piramide', 'pirâmide', 'fraude', 'scam'], reply: 'Se alguem promete retornos garantidos e altissimos, DESCONFIE. Piramides financeiras pagam os primeiros com dinheiro dos novos. Se parece bom demais, e golpe!' },
+    { keywords: ['cripto', 'bitcoin', 'criptomoeda', 'crypto'], reply: 'Criptomoedas sao investimentos de ALTO RISCO. Nunca invista mais do que voce pode perder. Cuidado com "dicas quentes" e influenciadores.' },
+    { keywords: ['acao', 'ações', 'acoes', 'bolsa', 'ação'], reply: 'A bolsa de valores e para longo prazo. Nao tente "adivinhar" o mercado. Diversifique e invista com regularidade. Fundos de indice (ETFs) sao otimos pra comecar.' },
+    { keywords: ['oi', 'ola', 'olá', 'hey', 'eai', 'bom dia', 'boa tarde', 'boa noite'], reply: 'Ola, jovem aventureiro! Sou o Mestre Auron, seu conselheiro financeiro. Me pergunte qualquer coisa sobre dinheiro!' },
+    { keywords: ['obrigado', 'obrigada', 'valeu', 'brigado'], reply: 'Por nada! Conhecimento financeiro e o melhor investimento que existe. Continue aprendendo!' },
+    { keywords: ['ajuda', 'help', 'ajudar', 'duvida', 'dúvida'], reply: 'Posso te ajudar com: orcamento, poupanca, investimentos, dividas, cartao de credito, reserva de emergencia, metas, golpes e mais.' },
+    { keywords: ['mesada', 'mesadas', 'dinheiro dos pais'], reply: 'Se voce recebe mesada, ja esta no jogo! Separe em 3 partes: gastar, guardar pra algo que quer, e reserva. Esse habito vai te fazer um adulto financeiramente forte.' },
+  ],
+  adult: [
+    { keywords: ['orcamento', 'orçamento', 'organizar', 'planejar', 'planejamento'], reply: 'A regra 50-30-20 e um bom ponto de partida: 50% necessidades, 30% desejos, 20% investimentos. Mas o ideal e personalizar conforme sua realidade. O importante e ter controle total do fluxo de caixa.' },
+    { keywords: ['poupar', 'poupanca', 'poupança', 'guardar', 'economizar', 'economia'], reply: 'Poupanca na caderneta rende abaixo da inflacao — seu dinheiro perde valor. Considere CDBs, Tesouro Selic ou fundos DI para reserva. Para metas de medio/longo prazo, diversifique entre renda fixa e variavel.' },
+    { keywords: ['investir', 'investimento', 'investimentos', 'renda', 'rendimento'], reply: 'Monte uma carteira diversificada: renda fixa (Tesouro, CDB, LCI/LCA) para seguranca, acoes e ETFs para crescimento, e FIIs para renda passiva. O mais importante e comecar e manter consistencia.' },
+    { keywords: ['divida', 'dívida', 'dividas', 'dívidas', 'dever', 'devendo', 'emprestimo'], reply: 'Priorize quitar dividas com juros altos (rotativo do cartao pode passar de 400%/ano). Considere portabilidade de credito e renegociacao. Use a estrategia avalanche (maior juros primeiro) ou bola de neve (menor saldo primeiro).' },
+    { keywords: ['cartao', 'cartão', 'credito', 'crédito'], reply: 'Cartao de credito pode ser um aliado: acumule milhas, use o periodo de carencia e SEMPRE pague a fatura total. Nunca entre no rotativo. Se nao consegue controlar, congele o cartao.' },
+    { keywords: ['emergencia', 'emergência', 'reserva', 'imprevisto'], reply: 'Reserva de emergencia: 6 a 12 meses de despesas em aplicacao com liquidez diaria (Tesouro Selic, CDB DI). Nao e investimento, e seguro. Sem ela, qualquer imprevisto vira divida.' },
+    { keywords: ['salario', 'salário', 'renda', 'ganhar', 'dinheiro'], reply: 'Foque em aumentar renda E reduzir gastos. Invista em skills que valorizam no mercado. Crie fontes de renda passiva. E lembre-se: seu maior ativo e sua capacidade de gerar renda.' },
+    { keywords: ['meta', 'metas', 'objetivo', 'objetivos', 'sonho'], reply: 'Use metas SMART com timeline: curto prazo (ate 1 ano) em renda fixa, medio prazo (1-5 anos) diversificado, longo prazo (5+ anos) com mais renda variavel. Automatize aportes mensais.' },
+    { keywords: ['golpe', 'golpes', 'piramide', 'pirâmide', 'fraude', 'scam'], reply: 'Desconfie de retornos acima de 2% ao mes. Verifique se a empresa tem registro na CVM. Piramides e esquemas Ponzi prometem retornos irreais. Se nao tem lastro real, e golpe.' },
+    { keywords: ['cripto', 'bitcoin', 'criptomoeda', 'crypto'], reply: 'Cripto pode compor 5-10% de uma carteira diversificada. Foque em projetos consolidados (BTC, ETH). Use exchanges regulamentadas. Guarde em cold wallet para valores maiores. Nunca invista o que nao pode perder.' },
+    { keywords: ['imposto', 'impostos', 'ir', 'declarar', 'declaracao'], reply: 'Planejamento tributario e essencial. Use PGBL para deduzir ate 12% da renda bruta no IR. LCI, LCA e debentures incentivadas sao isentas de IR. Organize seus informes de rendimento o ano todo.' },
+    { keywords: ['oi', 'ola', 'olá', 'hey', 'eai', 'bom dia', 'boa tarde', 'boa noite'], reply: 'Saudacoes! Sou o Mestre Auron. Posso te ajudar com estrategias de investimento, planejamento financeiro, gestao de dividas e muito mais. O que precisa?' },
+    { keywords: ['obrigado', 'obrigada', 'valeu', 'brigado'], reply: 'Disponha! Educacao financeira e um investimento que paga dividendos pro resto da vida. Continue buscando conhecimento!' },
+    { keywords: ['ajuda', 'help', 'ajudar', 'duvida', 'dúvida'], reply: 'Posso ajudar com: orcamento, investimentos, dividas, cartao de credito, reserva de emergencia, acoes, cripto, imposto de renda, metas financeiras e mais.' },
+  ],
+}
 
-const FALLBACK_REPLIES = [
-  'Boa pergunta! Financas podem parecer complicadas, mas o basico e simples: gaste menos do que ganha, poupe uma parte e invista o resto. Quer saber mais sobre algum desses temas?',
-  'Hmm, nao tenho certeza sobre isso. Mas posso te ajudar com orcamento, poupanca, investimentos, dividas e muito mais. Sobre o que quer conversar?',
-  'Interessante! No mundo das financas, a regra numero um e: nunca gaste mais do que voce ganha. Quer que eu explique mais sobre algum tema especifico?',
-  'Como seu conselheiro financeiro, recomendo que voce foque nos fundamentos: controle seus gastos, crie uma reserva de emergencia e comece a investir cedo. Me pergunte sobre qualquer um desses!',
-]
+const FALLBACK_REPLIES = {
+  child: [
+    'Boa pergunta! Dinheiro pode parecer complicado, mas e facil: nao gaste tudo de uma vez e guarde um pouquinho! Quer saber mais?',
+    'Hmm, nao sei bem sobre isso. Mas posso te ensinar sobre mesada, como guardar dinheiro e evitar golpes! O que quer saber?',
+    'Sabia que guardar dinheiro e tipo um jogo? Quanto mais voce guarda, mais pontos voce faz! Me pergunta qualquer coisa!',
+  ],
+  teen: [
+    'Boa pergunta! Financas podem parecer complicadas, mas o basico e simples: gaste menos do que ganha, poupe uma parte e invista o resto. Quer saber mais?',
+    'Hmm, nao tenho certeza sobre isso. Mas posso te ajudar com orcamento, poupanca, investimentos, dividas e muito mais. Sobre o que quer conversar?',
+    'Interessante! No mundo das financas, a regra numero um e: nunca gaste mais do que voce ganha. Quer que eu explique mais sobre algum tema?',
+    'Recomendo que voce foque nos fundamentos: controle seus gastos, crie uma reserva de emergencia e comece a investir cedo. Me pergunte sobre qualquer um desses!',
+  ],
+  adult: [
+    'Para responder melhor, preciso de mais contexto. Mas posso ajudar com investimentos, planejamento tributario, gestao de dividas, aposentadoria e mais. Qual area te interessa?',
+    'Interessante! Os pilares da saude financeira sao: orcamento controlado, reserva de emergencia, dividas zeradas e investimentos diversificados. Sobre qual quer conversar?',
+    'Recomendo focar em: zerar dividas caras, montar reserva de 6-12 meses, e investir consistentemente todo mes. Me pergunte sobre qualquer um desses temas!',
+  ],
+}
 
-function getAuronReply(message) {
+function getAuronReply(message, ageGroup) {
   const lower = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-  for (const entry of AURON_RESPONSES) {
+  const responses = AURON_RESPONSES[ageGroup] || AURON_RESPONSES.teen
+  for (const entry of responses) {
     for (const kw of entry.keywords) {
       const kwNorm = kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       if (lower.includes(kwNorm)) return entry.reply
     }
   }
-  return FALLBACK_REPLIES[Math.floor(Math.random() * FALLBACK_REPLIES.length)]
+  const fallbacks = FALLBACK_REPLIES[ageGroup] || FALLBACK_REPLIES.teen
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)]
 }
 
 export default function Mentor() {
   const [isOpen, setIsOpen] = useState(false)
+  const { profile } = useAuth()
+  const ageGroup = getAgeGroup(profile.age)
 
   return (
     <>
-      {isOpen && <AuronChatPanel onClose={() => setIsOpen(false)} />}
+      {isOpen && <AuronChatPanel onClose={() => setIsOpen(false)} ageGroup={ageGroup} />}
 
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -136,12 +135,18 @@ export default function Mentor() {
   )
 }
 
-function AuronChatPanel({ onClose }) {
+const WELCOME_MSG = {
+  child: 'Ola, aventureiro! Eu sou o Mestre Auron! Estou aqui pra te ensinar tudo sobre dinheiro de um jeito legal e divertido. Me pergunta qualquer coisa!',
+  teen: 'Saudacoes, jovem aventureiro! Eu sou o Mestre Auron, conselheiro real de financas do Reino de Valoria. Me pergunte qualquer coisa sobre dinheiro que eu te ajudo!',
+  adult: 'Saudacoes! Sou o Mestre Auron, seu consultor financeiro. Posso ajudar com investimentos, planejamento, gestao de dividas e estrategias financeiras. Como posso ajudar?',
+}
+
+function AuronChatPanel({ onClose, ageGroup }) {
   const [unrolled, setUnrolled] = useState(false)
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Saudacoes, jovem aventureiro! Eu sou o Mestre Auron, conselheiro real de financas do Reino de Valoria. Me pergunte qualquer coisa sobre dinheiro que eu te ajudo!',
+      content: WELCOME_MSG[ageGroup] || WELCOME_MSG.teen,
     },
   ])
   const [input, setInput] = useState('')
@@ -173,7 +178,7 @@ function AuronChatPanel({ onClose }) {
     setLoading(true)
 
     setTimeout(() => {
-      const reply = getAuronReply(text)
+      const reply = getAuronReply(text, ageGroup)
       setMessages(prev => [...prev, { role: 'assistant', content: reply }])
       setLoading(false)
     }, 800 + Math.random() * 700)
