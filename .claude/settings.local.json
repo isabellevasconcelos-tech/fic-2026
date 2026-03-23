@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__apply_migration",
+      "mcp__supabase__execute_sql",
+      "Bash(npx vite:*)",
+      "mcp__supabase__get_project_url",
+      "mcp__supabase__get_publishable_keys",
+      "Bash(rm:*)",
+      "Bash(npm run:*)",
+      "Bash(npx vercel:*)",
+      "Bash(vercel:*)",
+      "WebSearch",
+      "WebFetch(domain:app-camisas.vercel.app)",
+      "Bash(curl:*)",
+      "WebFetch(domain:fic-2026-92smgu3nr-isabelle2009lopes-6319s-projects.vercel.app)",
+      "WebFetch(domain:fic-2026.vercel.app)"
+    ]
+  }
+}

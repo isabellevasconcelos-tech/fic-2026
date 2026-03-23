@@ -576,6 +576,83 @@ export default function Story() {
           >
             Voltar ao Menu
           </button>
+          <button
+            onClick={() => navigate('/')}
+            className="w-full py-4 text-base font-heading font-bold rounded-2xl transition-all active:scale-[0.97]"
+            style={{
+              background: 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)',
+              boxShadow: '0 0 20px rgba(212,175,55,0.2), 0 4px 12px rgba(0,0,0,0.4)',
+              color: '#f5e6c8',
+              border: '1px solid rgba(212,175,55,0.3)',
+            }}
+          >
+            🏠 Voltar ao Início
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ========================
+  // TELA FINAL
+  // ========================
+  if (phase === 'finished') {
+    const allDone = CHAPTERS.every(ch => chaptersCompleted.includes(ch.id))
+
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 pb-8 bg-dark-900 animate-fade-in">
+        <div className="text-center max-w-sm">
+          <span className="text-7xl block mb-6">{allDone ? '👑' : '🏆'}</span>
+
+          <h1
+            className="font-display text-3xl sm:text-4xl font-bold text-gold-accent leading-tight mb-4"
+            style={{ textShadow: '0 0 20px rgba(212,175,55,0.6), 0 0 50px rgba(212,175,55,0.25)' }}
+          >
+            {allDone ? 'Jornada Completa!' : 'Parabéns, Aventureiro!'}
+          </h1>
+
+          <p className="text-base text-text-secondary leading-relaxed mb-3">
+            {allDone
+              ? 'Voce completou todos os capitulos do Reino de Valoria! Agora voce e um verdadeiro Guardiao das Financas.'
+              : `Voce concluiu o capitulo "${chapter.title}" com sucesso!`
+            }
+          </p>
+
+          <p className="text-sm text-text-muted leading-relaxed mb-8">
+            {allDone
+              ? 'Use o conhecimento adquirido para transformar sua vida financeira no mundo real.'
+              : 'Continue sua jornada para desbloquear novos capitulos e se tornar um mestre das financas.'
+            }
+          </p>
+
+          {xpEarned > 0 && (
+            <div className="neon-card p-4 rounded-2xl mb-8 inline-block">
+              <p className="font-display text-xl font-bold neon-text">+{xpEarned} XP</p>
+              <p className="text-[11px] text-text-muted mt-1">conquistados neste capitulo</p>
+            </div>
+          )}
+
+          <div className="space-y-4 w-full">
+            <button
+              onClick={() => navigate('/')}
+              className="w-full py-4 text-base font-heading font-bold rounded-2xl transition-all active:scale-[0.97]"
+              style={{
+                background: 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)',
+                boxShadow: '0 0 20px rgba(212,175,55,0.2), 0 4px 12px rgba(0,0,0,0.4)',
+                color: '#f5e6c8',
+                border: '1px solid rgba(212,175,55,0.3)',
+              }}
+            >
+              Voltar ao Início
+            </button>
+
+            <button
+              onClick={() => setPhase('menu')}
+              className="w-full py-3 text-sm font-heading font-semibold text-text-muted rounded-2xl border border-dark-500 hover:border-dark-400 transition-all"
+            >
+              Escolher outro capítulo
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -634,34 +711,34 @@ export default function Story() {
       {/* Character & Dialogue */}
       <div className="animate-slide-up" key={sceneId + (reaction ? '_r' : '')}>
         {/* Character */}
-        <div className="text-center mb-4">
-          <span className="text-5xl block mb-2">{char.emoji}</span>
-          <p className={`font-heading font-bold ${char.colorClass}`}>{char.name}</p>
-          {char.title && <p className="text-[11px] text-text-muted">{char.title}</p>}
+        <div className="text-center mb-6">
+          <span className="text-6xl block mb-3">{char.emoji}</span>
+          <p className={`font-heading text-lg font-bold ${char.colorClass}`}>{char.name}</p>
+          {char.title && <p className="text-xs text-text-muted mt-1">{char.title}</p>}
         </div>
 
         {/* Dialogue */}
-        <div className={`neon-card p-5 mb-5 ${char.borderClass}`}>
-          <p className="text-sm text-text-secondary leading-relaxed">{scene.text}</p>
+        <div className={`neon-card p-7 mb-6 rounded-2xl ${char.borderClass}`}>
+          <p className="text-base text-text-secondary leading-relaxed">{scene.text}</p>
         </div>
 
         {/* Reaction (after choosing) */}
         {reaction && (
-          <div className="neon-card p-4 mb-5 border-neon-yellow/20 animate-slide-up">
-            <p className="text-sm text-text-secondary leading-relaxed">{reaction}</p>
+          <div className="neon-card p-7 mb-6 rounded-2xl border-neon-yellow/20 animate-slide-up">
+            <p className="text-base text-text-secondary leading-relaxed">{reaction}</p>
           </div>
         )}
 
         {/* Choices or Advance button */}
         {!reaction && choices && choices.length > 0 && (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {choices.map((choice, i) => (
               <button
                 key={i}
                 onClick={() => handleChoice(choice)}
-                className="w-full text-left p-4 rounded-xl border bg-dark-700 border-dark-500 hover:border-neon-green/30 transition-all"
+                className="w-full text-left p-5 rounded-2xl border bg-dark-700 border-dark-500 hover:border-neon-green/30 hover:-translate-y-0.5 active:scale-[0.98] transition-all"
               >
-                <p className="font-heading text-sm text-text-primary">{choice.text}</p>
+                <p className="font-heading text-base text-text-primary leading-snug">{choice.text}</p>
               </button>
             ))}
           </div>
@@ -670,7 +747,7 @@ export default function Story() {
         {!reaction && !choices && (
           <button
             onClick={() => handleAdvance(scene)}
-            className="w-full bg-neon-cyan/10 border border-neon-cyan/40 text-neon-cyan font-heading font-semibold py-3 rounded-lg hover:bg-neon-cyan/20 transition-all"
+            className="w-full bg-neon-cyan/10 border border-neon-cyan/40 text-neon-cyan font-heading font-semibold py-4 text-base rounded-2xl hover:bg-neon-cyan/20 transition-all"
           >
             Continuar →
           </button>
@@ -679,7 +756,7 @@ export default function Story() {
         {reaction && lastChoice && (
           <button
             onClick={() => advanceAfterReaction(lastChoice)}
-            className="w-full bg-neon-cyan/10 border border-neon-cyan/40 text-neon-cyan font-heading font-semibold py-3 rounded-lg hover:bg-neon-cyan/20 transition-all animate-slide-up"
+            className="w-full bg-neon-cyan/10 border border-neon-cyan/40 text-neon-cyan font-heading font-semibold py-4 text-base rounded-2xl hover:bg-neon-cyan/20 transition-all animate-slide-up"
           >
             Continuar →
           </button>

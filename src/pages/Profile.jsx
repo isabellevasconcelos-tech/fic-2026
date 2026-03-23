@@ -5,22 +5,20 @@ import { supabase } from '../lib/supabase'
 
 export default function Profile() {
   const { user, profile } = useAuth()
-  const [stats, setStats] = useState({ lessons: 0, quizzes: 0, achievements: 0 })
+  const [stats, setStats] = useState({ lessons: 0, quizzes: 0 })
 
   useEffect(() => {
     if (user) fetchStats()
   }, [user])
 
   async function fetchStats() {
-    const [lessonsRes, quizzesRes, achievementsRes] = await Promise.all([
+    const [lessonsRes, quizzesRes] = await Promise.all([
       supabase.from('user_progress').select('id', { count: 'exact', head: true }).eq('user_id', profile.id),
       supabase.from('user_quiz_results').select('id', { count: 'exact', head: true }).eq('user_id', profile.id),
-      supabase.from('user_achievements').select('id', { count: 'exact', head: true }).eq('user_id', profile.id),
     ])
     setStats({
       lessons: lessonsRes.count || 0,
       quizzes: quizzesRes.count || 0,
-      achievements: achievementsRes.count || 0,
     })
   }
 
@@ -71,17 +69,6 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Achievements */}
-      <Link to="/achievements" className="card-secondary p-5 flex items-center justify-between mb-8 block hover-lift">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🏆</span>
-          <div>
-            <p className="font-heading font-semibold text-text-primary">Conquistas</p>
-            <p className="text-xs text-text-muted">{stats.achievements} desbloqueadas</p>
-          </div>
-        </div>
-        <span className="text-neon-cyan text-sm font-heading">Ver todas</span>
-      </Link>
     </div>
   )
 }

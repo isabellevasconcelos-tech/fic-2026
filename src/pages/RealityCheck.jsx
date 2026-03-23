@@ -15,17 +15,6 @@ const EXPENSES = [
   { id: 'beer', emoji: '🍺', label: 'Cervejinha', daily: 15, desc: 'Happy hour, bar, rolê' },
 ]
 
-// O que da pra comprar com X reais
-const BUYABLE = [
-  { min: 300, emoji: '🎮', label: 'Nintendo Switch Lite' , price: 1200, field: 'yearly' },
-  { min: 100, emoji: '📱', label: 'iPhone 15', price: 5000, field: 'yearly' },
-  { min: 50,  emoji: '✈️', label: 'Viagem internacional', price: 8000, field: 'yearly' },
-  { min: 30,  emoji: '🏍️', label: 'Moto 0km', price: 15000, field: 'yearly' },
-  { min: 80,  emoji: '🎓', label: '1 ano de faculdade', price: 12000, field: 'yearly' },
-  { min: 200, emoji: '💻', label: 'MacBook Air', price: 9000, field: 'yearly' },
-  { min: 150, emoji: '👟', label: 'Nike Air Jordan', price: 1800, field: 'yearly' },
-  { min: 40,  emoji: '🏠', label: 'Entrada de um AP (10 anos)', price: 60000, field: 'decade' },
-]
 
 // Animated counter hook
 function useAnimatedNumber(target, duration = 800) {
@@ -148,14 +137,6 @@ export default function RealityCheck() {
   const animMonthly = useAnimatedNumber(monthly)
   const animYearly = useAnimatedNumber(yearly)
   const animInvest10 = useAnimatedNumber(showInvest ? investedYearly.y10 : 0, 1200)
-
-  // What can you buy
-  const canBuy = useMemo(() =>
-    BUYABLE.filter(b => {
-      const val = b.field === 'yearly' ? yearly : decade
-      return val >= b.price * 0.8 && daily >= b.min / 10
-    }).slice(0, 4)
-  , [yearly, decade, daily])
 
   // Shock phrases
   const shockPhrases = useMemo(() => {
@@ -324,44 +305,6 @@ export default function RealityCheck() {
           </RevealSection>
         )}
 
-        {/* ==================== */}
-        {/* O QUE DARIA PRA      */}
-        {/* COMPRAR COM ISSO     */}
-        {/* ==================== */}
-        {daily > 0 && canBuy.length > 0 && (
-          <RevealSection className="mb-8">
-            <div className="neon-card p-5 border-neon-cyan/20">
-              <h3 className="font-heading text-xs font-semibold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span>🎯</span> O que dava pra comprar com esse dinheiro
-              </h3>
-              <div className="space-y-3">
-                {canBuy.map((item, i) => {
-                  const val = item.field === 'yearly' ? yearly : decade
-                  const pct = Math.min((val / item.price) * 100, 100)
-                  const months = Math.ceil(item.price / monthly)
-                  return (
-                    <div key={i}>
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">{item.emoji}</span>
-                          <span className="font-heading text-sm text-text-primary">{item.label}</span>
-                        </div>
-                        <span className="text-xs text-text-muted font-heading">
-                          R${item.price.toLocaleString('pt-BR')} • {months} meses
-                        </span>
-                      </div>
-                      <AnimatedBar value={pct} max={100} color="bg-gradient-to-r from-neon-cyan to-neon-green" delay={i * 100} />
-                    </div>
-                  )
-                })}
-              </div>
-              <p className="text-[11px] text-text-muted text-center font-heading mt-4">
-                Tudo isso so redirecionando o que voce gasta em besteira
-              </p>
-            </div>
-          </RevealSection>
-        )}
-
         {/* ======================== */}
         {/* E SE INVESTISSE?         */}
         {/* ======================== */}
@@ -462,60 +405,6 @@ export default function RealityCheck() {
                   )}
                 </div>
               )}
-            </div>
-          </RevealSection>
-        )}
-
-        {/* ======================== */}
-        {/* COMPARACAO VISUAL        */}
-        {/* ======================== */}
-        {daily > 0 && (
-          <RevealSection className="mb-8">
-            <div className="neon-card p-5 border-dark-500">
-              <h3 className="font-heading text-xs font-semibold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span>⚖️</span> Comparacao
-              </h3>
-
-              <div className="space-y-3">
-                {/* Tempo trabalhando */}
-                <div className="bg-dark-800/50 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">⏰</span>
-                    <div>
-                      <p className="font-heading text-sm text-text-primary">
-                        Voce trabalha <span className="neon-text-pink font-bold">{Math.round((yearly / 1500) * 22)} dias</span> por ano
-                      </p>
-                      <p className="text-xs text-text-muted">so pra pagar essas besteiras (salario de R$1.500)</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pilha de notas */}
-                <div className="bg-dark-800/50 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">💵</span>
-                    <div>
-                      <p className="font-heading text-sm text-text-primary">
-                        R${yearly.toLocaleString('pt-BR')}/ano = <span className="neon-text-yellow font-bold">{Math.round(yearly / 100)} notas</span> de R$100
-                      </p>
-                      <p className="text-xs text-text-muted">Imagine uma pilha dessas notas... indo pro lixo</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pizza / refeicoes */}
-                <div className="bg-dark-800/50 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🍕</span>
-                    <div>
-                      <p className="font-heading text-sm text-text-primary">
-                        Equivale a <span className="neon-text-cyan font-bold">{Math.round(monthly / 4)} pizzas</span> por mes
-                      </p>
-                      <p className="text-xs text-text-muted">Ou {Math.round(yearly / 30)} refeicoes completas por ano</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </RevealSection>
         )}
