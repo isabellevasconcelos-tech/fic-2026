@@ -790,3 +790,52 @@ body {
     padding: 3rem 2.5rem 2.5rem;
   }
 }
+
+/* ========== Papyrus Scroll — Chat Panel ========== */
+
+.papyrus-scroll {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.papyrus-roll {
+  height: 20px;
+  background: linear-gradient(180deg, #8B6914, #C8A84E 30%, #A67C00 60%, #8B6914);
+  border-radius: 10px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 2;
+}
+
+.papyrus-roll::before,
+.papyrus-roll::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: 28px;
+  background: linear-gradient(180deg, #6B4E1B, #8B6914 40%, #A67C00 60%, #6B4E1B);
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.papyrus-roll::before { left: -8px; }
+.papyrus-roll::after { right: -8px; }
+
+.papyrus-body {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(198, 40, 40, 0.04) 0%, transparent 12%),
+    radial-gradient(circle at 85% 70%, rgba(198, 40, 40, 0.03) 0%, transparent 10%),
+    radial-gradient(circle at 50% 50%, rgba(33, 150, 243, 0.02) 0%, transparent 15%),
+    linear-gradient(160deg, #1A1209 0%, #231A0E 25%, #2E2214 50%, #1A1209 75%, #231A0E 100%);
+  border-left: 3px solid rgba(200, 168, 78, 0.2);
+  border-right: 3px solid rgba(200, 168, 78, 0.2);
+  padding: 2.5rem 2rem;
+  position: relative;
+  box-shadow:
+    inset 0 0 60px rgba(0, 0, 0, 0.15),
+    inset 0 0 120px rgba(26, 18, 9, 0.05);
+}
