@@ -365,6 +365,8 @@ export default function QuizBattle() {
   const [countdownNum, setCountdownNum] = useState(3)
   const [highScore, setHighScore] = useState(0)
   const [answers, setAnswers] = useState([])
+  const [xpCollected, setXpCollected] = useState(false)
+  const [collectingXp, setCollectingXp] = useState(false)
   const feedback = useFeedback()
   const timerRef = useRef(null)
   const startTimeRef = useRef(null)
@@ -414,6 +416,8 @@ export default function QuizBattle() {
     setSelected(null)
     setShowExplain(false)
     setAnswers([])
+    setXpCollected(false)
+    setCollectingXp(false)
     setCountdownNum(3)
     setPhase('countdown')
   }
@@ -486,18 +490,23 @@ export default function QuizBattle() {
       } catch {}
     }
 
-    // Award XP
-    const xpAmount = Math.round(finalScore / 20)
-    if (user && xpAmount > 0) {
+    feedback?.trigger('complete', { emoji: '🧠', title: 'Quiz Completo!', subtitle: `${finalScore.toLocaleString('pt-BR')} pontos` })
+    setPhase('result')
+  }
+
+  async function collectXp() {
+    const xpAmount = Math.round(score / 20)
+    if (!user || xpAmount <= 0) return
+    setCollectingXp(true)
+    try {
       await supabase.rpc('add_xp', { p_user_id: profile.id, p_amount: xpAmount })
       await refreshProfile()
+      setXpCollected(true)
+      feedback?.trigger('xp', { amount: xpAmount, label: 'XP coletado!' })
+      feedback?.checkLevelUp(profile.level)
+    } catch {
+      setCollectingXp(false)
     }
-
-    if (xpAmount > 0) feedback?.trigger('xp', { amount: xpAmount, label: 'Quiz Battle concluido!' })
-    feedback?.trigger('complete', { emoji: '🧠', title: 'Quiz Completo!', subtitle: `${finalScore.toLocaleString('pt-BR')} pontos` })
-    if (profile) feedback?.checkLevelUp(profile.level)
-
-    setPhase('result')
   }
 
   // ========================
@@ -651,10 +660,28 @@ export default function QuizBattle() {
           </div>
         </div>
 
-        {/* XP earned */}
-        {xpEarned > 0 && (
-          <div className="text-center mb-4">
-            <span className="font-display text-lg font-bold neon-text">+{xpEarned} XP ganhos!</span>
+        {/* Collect XP */}
+        {xpEarned > 0 && user && (
+          <div className="mb-4">
+            {xpCollected ? (
+              <div className="text-center py-3 animate-fade-in">
+                <span className="font-display text-lg font-bold neon-text">+{xpEarned} XP coletado!</span>
+              </div>
+            ) : (
+              <button
+                onClick={collectXp}
+                disabled={collectingXp}
+                className="w-full py-4 rounded-xl font-heading font-bold uppercase tracking-wider text-base transition-all duration-300 active:scale-[0.97] disabled:opacity-60 animate-fade-in"
+                style={{
+                  background: 'linear-gradient(135deg, #A02035, #7B1D2A)',
+                  border: '2px solid rgba(212,175,55,0.6)',
+                  color: '#f5e6c8',
+                  boxShadow: '0 0 25px rgba(212,175,55,0.2), 0 4px 15px rgba(0,0,0,0.4)',
+                }}
+              >
+                {collectingXp ? 'Coletando...' : `⭐ Coletar ${xpEarned} XP`}
+              </button>
+            )}
           </div>
         )}
 
