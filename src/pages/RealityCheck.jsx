@@ -8,11 +8,9 @@ const EXPENSES = [
   { id: 'coffee', emoji: '☕', label: 'Cafezinho', daily: 8, desc: 'Cafe na padaria todo dia' },
   { id: 'snack', emoji: '🍫', label: 'Lanchinho', daily: 10, desc: 'Salgado, chocolate, besteira...' },
   { id: 'uber', emoji: '🚗', label: 'Uber/99', daily: 15, desc: 'Corridinha "rapida"' },
-  { id: 'cig', emoji: '🚬', label: 'Cigarro', daily: 12, desc: 'Maco por dia' },
   { id: 'delivery', emoji: '🛵', label: 'iFood', daily: 25, desc: 'Almocar por delivery' },
   { id: 'subs', emoji: '📱', label: 'Apps/Assinaturas', daily: 5, desc: 'Streaming, jogos, apps' },
   { id: 'impulse', emoji: '🛍️', label: 'Compra por impulso', daily: 8, desc: 'Shopee, promoção...' },
-  { id: 'beer', emoji: '🍺', label: 'Cervejinha', daily: 15, desc: 'Happy hour, bar, rolê' },
 ]
 
 const BUYABLE = [
