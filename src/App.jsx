@@ -24,7 +24,7 @@ function AppRoutes() {
   return (
     <>
       {!hideNav && <TopBar />}
-      <main className="relative w-full max-w-lg mx-auto min-h-screen">
+      <main className={`relative w-full max-w-lg mx-auto min-h-screen ${!hideNav ? 'pt-14' : ''}`}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/modules" element={<Modules />} />
