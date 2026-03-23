@@ -72,28 +72,26 @@ export default function Home() {
           Explorar
         </h2>
 
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-3">
           {FEATURE_CARDS.map(card => (
             <Link
               key={card.to}
               to={card.to}
-              className="group card-primary rounded-2xl flex items-center gap-3 p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-gold-accent/40 active:scale-[0.97]"
+              className="group card-primary rounded-2xl flex flex-col items-center justify-center text-center p-5 py-6 transition-all duration-300 hover:-translate-y-1 hover:border-gold-accent/40 active:scale-[0.97]"
               style={{ boxShadow: '0 0 12px rgba(212,175,55,0.15), 0 0 30px rgba(212,175,55,0.08), inset 0 0 12px rgba(212,175,55,0.03)' }}
             >
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 shadow-lg"
+                className="w-14 h-14 rounded-full flex items-center justify-center text-2xl shrink-0 shadow-lg mb-3"
                 style={{ background: 'radial-gradient(circle at 35% 35%, #A02035, #7B1D2A 45%, #5A1420 80%, #3A0E15)' }}
               >
                 {card.emoji}
               </div>
-              <div className="min-w-0">
-                <span className="font-heading text-xs font-semibold text-enchanted block leading-tight">
-                  {card.label}
-                </span>
-                <span className="text-enchanted-muted/50 text-[11px] font-body block mt-0.5">
-                  {card.desc}
-                </span>
-              </div>
+              <span className="font-heading text-sm font-bold text-enchanted block leading-tight">
+                {card.label}
+              </span>
+              <span className="text-enchanted-muted/60 text-xs font-body block mt-1">
+                {card.desc}
+              </span>
             </Link>
           ))}
         </div>
