@@ -535,3 +535,258 @@ body {
 .lesson-content li { margin: 0.4rem 0; line-height: 1.6; }
 .lesson-content blockquote { border-left: 3px solid #8b1a2b; padding: 0.75rem 1rem; margin: 1rem 0; background: rgba(139, 26, 43, 0.06); border-radius: 0 8px 8px 0; }
 .lesson-content code { background: #2e1824; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; color: #d4af37; }
+
+/* ========== 4-point mini star sparkle ========== */
+.brand-sparkle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.brand-sparkle::before,
+.brand-sparkle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 1px;
+}
+
+.brand-sparkle::before {
+  width: var(--s-size, 2px);
+  height: calc(var(--s-size, 2px) * 4);
+  background: var(--s-color, #D4AF37);
+  box-shadow: 0 0 var(--s-size, 2px) var(--s-color, #D4AF37);
+  animation: sparkle-4pt var(--s-speed, 2s) ease-in-out var(--s-delay, 0s) infinite;
+}
+
+.brand-sparkle::after {
+  width: calc(var(--s-size, 2px) * 4);
+  height: var(--s-size, 2px);
+  background: var(--s-color, #D4AF37);
+  box-shadow: 0 0 var(--s-size, 2px) var(--s-color, #D4AF37);
+  animation: sparkle-4pt var(--s-speed, 2s) ease-in-out var(--s-delay, 0s) infinite;
+}
+
+@keyframes sparkle-4pt {
+  0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(0.4); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Home hero title */
+.home-brand-title {
+  color: #D4AF37;
+  text-shadow:
+    0 0 20px rgba(212, 175, 55, 0.6),
+    0 0 50px rgba(212, 175, 55, 0.25),
+    0 0 80px rgba(212, 175, 55, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(180deg, #FFD700 0%, #D4AF37 40%, #B8962A 70%, #A08830 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.4)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+}
+
+/* ========== Enchanted Book — Home ========== */
+
+.enchanted-book {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  perspective: 1200px;
+}
+
+.book-cover {
+  position: relative;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(60, 35, 15, 0.08) 2px,
+      rgba(60, 35, 15, 0.08) 3px
+    ),
+    linear-gradient(160deg, #2A1C12 0%, #1E140C 40%, #231A10 70%, #2A1C12 100%);
+  border: 2px solid rgba(200, 150, 46, 0.35);
+  border-radius: 6px 16px 16px 6px;
+  box-shadow:
+    -4px 0 0 #1A1008,
+    -6px 0 0 #14100A,
+    -8px 0 0 #100C08,
+    0 8px 40px rgba(0, 0, 0, 0.6),
+    0 2px 12px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(200, 150, 46, 0.06),
+    inset 0 0 80px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.book-cover::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(200, 150, 46, 0.2);
+  border-radius: 3px 10px 10px 3px;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 0 0 / 20px 1.5px,
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 0 0 / 1.5px 20px,
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 100% 0 / 20px 1.5px,
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 100% 0 / 1.5px 20px,
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 0 100% / 20px 1.5px,
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 0 100% / 1.5px 20px,
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 100% 100% / 20px 1.5px,
+    linear-gradient(rgba(212, 175, 55, 0.35), rgba(212, 175, 55, 0.35)) no-repeat 100% 100% / 1.5px 20px;
+}
+
+.book-cover::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 4px 14px 14px 4px;
+  background:
+    radial-gradient(circle 4px at 14px 14px, rgba(212, 175, 55, 0.6) 20%, rgba(139, 26, 43, 0.3) 60%, transparent 100%),
+    radial-gradient(circle 4px at calc(100% - 14px) 14px, rgba(212, 175, 55, 0.6) 20%, rgba(139, 26, 43, 0.3) 60%, transparent 100%),
+    radial-gradient(circle 4px at 14px calc(100% - 14px), rgba(212, 175, 55, 0.6) 20%, rgba(139, 26, 43, 0.3) 60%, transparent 100%),
+    radial-gradient(circle 4px at calc(100% - 14px) calc(100% - 14px), rgba(212, 175, 55, 0.6) 20%, rgba(139, 26, 43, 0.3) 60%, transparent 100%);
+}
+
+.book-spine {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 6px;
+  background:
+    linear-gradient(180deg,
+      rgba(200, 150, 46, 0.3) 0%,
+      rgba(200, 150, 46, 0.15) 20%,
+      rgba(200, 150, 46, 0.08) 50%,
+      rgba(200, 150, 46, 0.15) 80%,
+      rgba(200, 150, 46, 0.3) 100%
+    );
+  border-right: 1px solid rgba(200, 150, 46, 0.12);
+  z-index: 3;
+}
+
+.book-page {
+  position: relative;
+  padding: 2.5rem 2rem 2rem;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 120px 100px at 80% 20%, rgba(120, 60, 20, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 80px 90px at 20% 75%, rgba(100, 50, 20, 0.04) 0%, transparent 70%),
+    linear-gradient(175deg, rgba(42, 31, 20, 0.3) 0%, rgba(35, 26, 16, 0.4) 100%);
+}
+
+.book-title-area {
+  text-align: center;
+  padding: 1.5rem 1rem 1.5rem;
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(212, 175, 55, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 45%, rgba(139, 26, 43, 0.05) 0%, transparent 60%);
+}
+
+.book-title-area::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 40%, transparent 70%);
+  pointer-events: none;
+  animation: title-halo-pulse 4s ease-in-out infinite;
+}
+
+@keyframes title-halo-pulse {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -55%) scale(0.95); }
+  50% { opacity: 1; transform: translate(-50%, -55%) scale(1.05); }
+}
+
+.home-menu-card {
+  position: relative;
+}
+
+.home-menu-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 0.8rem;
+  background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 0.4s ease;
+}
+
+.home-menu-card:hover::before {
+  opacity: 1;
+  background: radial-gradient(ellipse 80% 70% at 50% 40%, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+}
+
+.home-menu-card:hover {
+  box-shadow: 0 4px 25px rgba(0,0,0,0.4), 0 0 25px rgba(212,175,55,0.18), 0 0 50px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.12) !important;
+  transform: translateY(-2px);
+}
+
+.book-page-edges {
+  position: absolute;
+  right: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 8px;
+  z-index: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(200, 150, 46, 0.06) 3px,
+      rgba(200, 150, 46, 0.06) 4px
+    );
+  border-left: 1px solid rgba(200, 150, 46, 0.05);
+}
+
+.book-bookmark {
+  position: absolute;
+  top: -2px;
+  right: 28px;
+  width: 20px;
+  height: 48px;
+  background: linear-gradient(180deg, #8B1A2B, #A02035);
+  z-index: 4;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.book-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  color: rgba(200, 150, 46, 0.35);
+}
+
+.book-ornament-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 150, 46, 0.2), transparent);
+}
+
+@media (min-width: 640px) {
+  .enchanted-book {
+    max-width: 560px;
+  }
+  .book-page {
+    padding: 3rem 2.5rem 2.5rem;
+  }
+}
