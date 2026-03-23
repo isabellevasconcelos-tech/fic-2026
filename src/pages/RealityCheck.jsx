@@ -142,7 +142,7 @@ export default function RealityCheck() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-dark-900/90 backdrop-blur-lg border-b border-dark-700 px-4 py-3">
         <div className="flex items-center gap-3">
-          <button onClick={back} className="text-text-muted hover:text-text-secondary">
+          <button onClick={back} className="w-11 h-11 flex items-center justify-center text-text-muted hover:text-text-secondary">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
@@ -195,7 +195,7 @@ export default function RealityCheck() {
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <p className="text-[11px] text-text-muted truncate flex-1">{exp.desc}</p>
+                      <p className="text-xs text-text-muted truncate flex-1">{exp.desc}</p>
                       <span className={`text-xs font-display font-bold ml-2 ${isOn ? 'text-neon-pink' : 'text-text-muted'}`}>
                         R${exp.daily}
                       </span>
@@ -268,7 +268,7 @@ export default function RealityCheck() {
                 <AnimatedBar value={yearly} max={36000} color="bg-gradient-to-r from-neon-pink via-neon-purple to-neon-cyan" delay={300} />
               </div>
 
-              <p className="text-[11px] text-text-muted text-right font-heading mt-2">
+              <p className="text-xs text-text-muted text-right font-heading mt-2">
                 Em 5 anos: <span className="text-neon-pink font-bold">R${fiveYears.toLocaleString('pt-BR')}</span>
                 {' '}• Em 10 anos: <span className="text-neon-pink font-bold">R${decade.toLocaleString('pt-BR')}</span>
               </p>
@@ -366,7 +366,7 @@ export default function RealityCheck() {
                   })
                 )}
               </div>
-              <p className="text-[11px] text-text-muted text-center font-heading mt-4">
+              <p className="text-xs text-text-muted text-center font-heading mt-4">
                 Tudo isso so redirecionando o que voce gasta em besteira
               </p>
             </div>

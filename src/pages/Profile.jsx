@@ -26,7 +26,7 @@ export default function Profile() {
   const xpProgress = (xpInLevel / 500) * 100
 
   return (
-    <div className="pb-24 px-4 pt-8 animate-fade-in">
+    <div className="pb-28 px-4 pt-6 animate-fade-in">
       {/* Profile Header */}
       <div className="card-primary p-6 text-center mb-8">
         <span className="text-5xl mb-3 block icon-pop inline-block">{profile.avatar_emoji}</span>
