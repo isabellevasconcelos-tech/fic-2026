@@ -15,11 +15,10 @@ import RealityCheck from './pages/RealityCheck'
 import QuizBattle from './pages/QuizBattle'
 import Personality from './pages/Personality'
 import BeforeAfter from './pages/BeforeAfter'
-import Chat from './pages/Chat'
 
 function AppRoutes() {
   const location = useLocation()
-  const hideNav = location.pathname.startsWith('/quiz/') || location.pathname === '/simulator' || location.pathname === '/story' || location.pathname === '/reality-check' || location.pathname === '/quiz-battle' || location.pathname === '/personality' || location.pathname === '/before-after' || location.pathname === '/chat'
+  const hideNav = location.pathname.startsWith('/quiz/') || location.pathname === '/simulator' || location.pathname === '/story' || location.pathname === '/reality-check' || location.pathname === '/quiz-battle' || location.pathname === '/personality' || location.pathname === '/before-after'
 
   return (
     <>
@@ -38,7 +37,6 @@ function AppRoutes() {
         <Route path="/quiz-battle" element={<QuizBattle />} />
         <Route path="/personality" element={<Personality />} />
         <Route path="/before-after" element={<BeforeAfter />} />
-        <Route path="/chat" element={<Chat />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </main>

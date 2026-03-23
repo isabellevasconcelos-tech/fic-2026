@@ -15,7 +15,6 @@ const MOTIVATIONAL_PHRASES = [
 const FEATURED_CARD = { to: '/story', emoji: '🎮', label: 'Aprenda Jogando', desc: 'Sua jornada no Reino de Valoria' }
 
 const GRID_CARDS = [
-  { to: '/chat',          emoji: '🧙', label: 'Fale com Auron',      desc: 'Tire suas dúvidas' },
   { to: '/reality-check', emoji: '💀', label: 'Choque de Realidade', desc: 'Gastos e receitas' },
   { to: '/modules',       emoji: '📚', label: 'Suas Trilhas',        desc: 'Educação financeira' },
   { to: '/simulator',     emoji: '🐷', label: 'Economia',            desc: 'Simule suas economias' },
