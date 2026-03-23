@@ -64,7 +64,7 @@ export default function Home() {
                 <span className="book-ornament-line" />
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl home-brand-title leading-tight relative inline-block">
+              <h1 className="font-display text-5xl sm:text-6xl font-black home-brand-title leading-tight relative inline-block">
                 Money
                 <br />
                 Quest
