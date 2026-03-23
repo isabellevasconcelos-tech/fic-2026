@@ -131,7 +131,7 @@ export default function Profile() {
   // ── Guest: Create Profile Form ──
   if (!user) {
     return (
-      <div className="pb-28 px-4 pt-6 animate-fade-in">
+      <div className="pb-28 px-5 pt-6 animate-fade-in">
         <div className="card-primary p-6 mb-6">
           <h1 className="page-title text-center mb-2">Criar Perfil</h1>
           <p className="text-enchanted-muted text-sm text-center mb-6">
@@ -191,7 +191,7 @@ export default function Profile() {
   // ── Logged in: Edit Mode ──
   if (editing) {
     return (
-      <div className="pb-28 px-4 pt-6 animate-fade-in">
+      <div className="pb-28 px-5 pt-6 animate-fade-in">
         <div className="card-primary p-6 mb-6">
           <h1 className="page-title text-center mb-6">Editar Perfil</h1>
 
@@ -259,7 +259,7 @@ export default function Profile() {
   const xpProgress = (xpInLevel / 500) * 100
 
   return (
-    <div className="pb-28 px-4 pt-6 animate-fade-in">
+    <div className="pb-28 px-5 pt-6 animate-fade-in">
       <div className="card-primary p-6 text-center mb-8">
         <span className="text-5xl mb-3 block icon-pop inline-block">{profile.avatar_emoji}</span>
         <h1 className="page-title">{profile.full_name}</h1>
