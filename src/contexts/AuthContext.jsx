@@ -51,8 +51,46 @@ export function AuthProvider({ children }) {
     if (user) await fetchProfile(user.id)
   }
 
+  async function createProfile({ username, full_name, avatar_emoji }) {
+    const { data: authData, error: authError } = await supabase.auth.signInAnonymously()
+    if (authError) throw authError
+
+    const userId = authData.user.id
+
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .upsert({
+        id: userId,
+        username,
+        full_name,
+        avatar_emoji,
+        xp: 0,
+        level: 1,
+        streak_days: 0,
+      })
+
+    if (profileError) throw profileError
+    await fetchProfile(userId)
+  }
+
+  async function updateProfile({ username, full_name, avatar_emoji }) {
+    if (!user) return
+    const { error } = await supabase
+      .from('profiles')
+      .update({ username, full_name, avatar_emoji, updated_at: new Date().toISOString() })
+      .eq('id', user.id)
+    if (error) throw error
+    await fetchProfile(user.id)
+  }
+
+  async function signOut() {
+    await supabase.auth.signOut()
+    setUser(null)
+    setProfile(DEFAULT_PROFILE)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading, refreshProfile }}>
+    <AuthContext.Provider value={{ user, profile, loading, refreshProfile, createProfile, updateProfile, signOut }}>
       {children}
     </AuthContext.Provider>
   )
