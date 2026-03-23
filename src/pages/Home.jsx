@@ -16,7 +16,6 @@ const FEATURED_CARD = { to: '/story', emoji: '🎮', label: 'Aprenda Jogando', d
 
 const GRID_CARDS = [
   { to: '/reality-check', emoji: '💀', label: 'Choque de Realidade', desc: 'Gastos e receitas' },
-  { to: '/modules',       emoji: '📚', label: 'Suas Trilhas',        desc: 'Educação financeira' },
   { to: '/simulator',     emoji: '🐷', label: 'Economia',            desc: 'Simule suas economias' },
   { to: '/profile',       emoji: '📊', label: 'Seu Progresso',       desc: 'Acompanhe sua evolução' },
   { to: '/quiz-battle',   emoji: '⚔️', label: 'Quiz Battle',         desc: 'Teste seus conhecimentos' },
