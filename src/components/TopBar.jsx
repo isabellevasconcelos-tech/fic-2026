@@ -61,6 +61,16 @@ export default function TopBar() {
 
         {/* Right: XP + Avatar + Menu */}
         <div className="flex items-center gap-3">
+          {/* Streak */}
+          <div className="flex flex-col items-center gap-0.5">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center bg-dark-700/60 border border-orange-500/20">
+              <span className="text-base">🔥</span>
+            </div>
+            <span className="text-[9px] font-heading tracking-wider uppercase text-orange-400 font-bold">
+              {profile?.streak_days || 0} dias
+            </span>
+          </div>
+
           {/* XP coin */}
           <Link to="/profile" className="no-underline flex flex-col items-center gap-0.5 group">
             <div className="w-9 h-9 rounded-full flex items-center justify-center bg-dark-700/60 border border-gold-accent/20 group-hover:border-gold-accent/40 transition-all">
