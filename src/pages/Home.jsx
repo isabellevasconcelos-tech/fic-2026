@@ -34,15 +34,32 @@ export default function Home() {
     <div className="pb-28 px-4 pt-4 animate-fade-in flex flex-col gap-3">
 
       {/* ── Título ── */}
-      <div className="text-center py-2">
+      <div className="text-center py-6 relative">
+        {/* Decorative elements */}
+        <span className="text-gold-accent/30 text-xs absolute top-4 left-1/4">✦</span>
+        <span className="text-gold-accent/20 text-[10px] absolute top-8 right-1/4">✦</span>
+        <span className="text-gold-accent/25 text-sm absolute bottom-6 left-[30%]">✦</span>
+        <span className="text-gold-accent/15 text-xs absolute bottom-4 right-[28%]">✦</span>
+
         <h1
-          className="font-display text-4xl font-bold text-gold-accent tracking-wide leading-none inline-block"
-          style={{ textShadow: '0 0 24px rgba(212,175,55,0.7), 0 0 60px rgba(212,175,55,0.3), 0 2px 6px rgba(0,0,0,0.8)' }}
+          className="font-display text-[2.5rem] font-bold text-gold-accent tracking-wider leading-[1.1] inline-block"
+          style={{ textShadow: '0 0 30px rgba(212,175,55,0.7), 0 0 60px rgba(212,175,55,0.3), 0 2px 6px rgba(0,0,0,0.8)' }}
         >
-          MoneyQuest
+          Money<br />Quest
         </h1>
-        <p className="text-xs text-enchanted-muted font-heading tracking-[0.12em] mt-1.5">
-          Sua jornada financeira começa aqui
+
+        {/* Divider line */}
+        <div className="flex items-center justify-center gap-3 mt-3 mb-2">
+          <div className="h-px w-10 bg-gradient-to-r from-transparent to-gold-accent/40" />
+          <span className="text-gold-accent/60 text-[10px]">◆</span>
+          <div className="h-px w-10 bg-gradient-to-l from-transparent to-gold-accent/40" />
+        </div>
+
+        <p className="text-[11px] font-heading font-semibold text-gold-accent/70 uppercase tracking-[0.2em]">
+          Educação Financeira
+        </p>
+        <p className="text-xs text-enchanted-muted/60 font-body italic mt-1">
+          Sua jornada financeira começa aqui.
         </p>
       </div>
 
