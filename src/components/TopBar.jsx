@@ -19,7 +19,17 @@ export default function TopBar() {
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-dark-900/95 border-b border-gold-accent/10">
-      <div className="flex items-center justify-end gap-2 h-14 px-4">
+      <div className="flex items-center justify-between h-14 px-4">
+        {/* XP */}
+        <Link to="/profile" className="flex items-center gap-1.5 bg-dark-700/60 border border-gold-accent/20 rounded-full px-3 py-1.5 hover:border-gold-accent/40 transition-colors">
+          <span className="text-base">🪙</span>
+          <div className="flex flex-col items-start leading-none">
+            <span className="font-display text-sm font-bold text-gold-accent">{profile?.xp || 0}</span>
+            <span className="text-[9px] text-enchanted-muted/60 font-heading uppercase tracking-wider">XP</span>
+          </div>
+        </Link>
+
+        <div className="flex items-center gap-2">
         {/* Perfil */}
         <Link to="/profile" className="flex items-center gap-2 group p-1">
           <div className="w-10 h-10 rounded-full bg-rose-pastel border border-gold-accent/25 flex items-center justify-center text-lg shrink-0 group-hover:border-gold-accent/50 transition-colors">
@@ -65,6 +75,7 @@ export default function TopBar() {
               </button>
             </div>
           )}
+        </div>
         </div>
       </div>
     </header>
